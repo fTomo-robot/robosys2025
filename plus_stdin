@@ -1,4 +1,7 @@
 #!/usr/bin/python3
+# SPDX-FileCopyrightText: 2025 Fujiwara Tomotaka
+
+
 import sys
 
 ans=0
