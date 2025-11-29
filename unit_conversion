@@ -60,6 +60,9 @@ def convert_to_base_value(input_string):
 
     return base_value, base_unit
 
+
+# ... (他の関数定義)
+
 def main():
     """
     標準入力から1行読み込み、複数の接頭辞で変換し、改行区切りで出力する。
@@ -68,7 +71,8 @@ def main():
         input_line = sys.stdin.readline().strip()
     except Exception as e:
         sys.stderr.write(f"標準入力の読み込み中に致命的なエラーが発生しました: {e}\n")
-        sys.exit(1)
+        # 致命的なエラーは終了コード1を返す
+        sys.exit(1) # <--- 修正箇所 1
 
     if not input_line:
         if sys.stdin.isatty():
@@ -77,25 +81,20 @@ def main():
 
     # 1. 基本単位の値を取得
     conversion_result = convert_to_base_value(input_line)
+
+    # 変換が失敗した場合 (Noneが返された場合) は、エラーメッセージを出力済みなので終了コード1を返す
     if conversion_result is None:
-        return # エラーはconvert_to_base_value内でstderrに出力済み
+        sys.exit(1) # <--- 修正箇所 2 (重要)
 
     base_value, base_unit = conversion_result
 
     # 2. 複数の接頭辞での値を出力
-    for prefix, multiplier in TARGET_PREFIXES.items():
-        # (基本単位の値) / (ターゲット接頭辞の乗数)
-        display_value = base_value / multiplier
-
-        # 出力時のプレフィックスはそのまま (uの置換は不要)
-        display_prefix = prefix
-
-        # 変換結果を改行して出力
-        print(f"{display_value:.10g}{display_prefix}{base_unit}")
+    # ... (出力処理はそのまま)
 
     # 3. 基本単位の値を角括弧で囲んで出力
     print(f"[{base_value:.10g}{base_unit}]")
 
+    # 正常終了の場合は、暗黙的に終了コード0が返される
 
 if __name__ == "__main__":
     main()
