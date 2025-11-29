@@ -1,7 +1,7 @@
 # unit_conversion
 ![test](https://github.com/fTomo-robot/robosys2025/actions/workflows/test.yml/badge.svg)  
 コンデンサや抵抗の接頭辞を変換するコマンド  
-	- 入力された電子部品の値を基本単位やその他の主な接頭辞をつけた状態で出力します
+- 入力された電子部品の値を基本単位やその他の主な接頭辞をつけた状態で出力します
 
 # 動作確認環境
 - Ubuntu-22.04.5
