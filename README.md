@@ -3,6 +3,7 @@
 
 
 # 概要
+`unit_conversion` ![test](https://github.com/ftomo-robot/robosys2025/.github/workflows/test.yml/badge.svg)
 コンデンサや抵抗の接頭辞を変換するコマンド
 
 # 動作環境
