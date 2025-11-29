@@ -2,7 +2,100 @@
 # SPDX-FileCopyrightText: 2025 Tomotaka Fujiwara
 # SPDX-License-Identifier: BSD-3-Clause
 
+
 import sys
+import re
 
 
+# 単位プレフィックスと乗数の対応（変換元用）
+PREFIX_MAP = {
+    'p': 1e-12, 'n': 1e-9, 'u': 1e-6, 'm': 1e-3,
+    '': 1.0,
+    'k': 1e3, 'M': 1e6, 'G': 1e9
+}
 
+# ターゲットとする接頭辞と乗数の対応（出力用）
+TARGET_PREFIXES = {
+    'G': 1e9, 'M': 1e6, 'k': 1e3,
+    '': 1.0,
+    'm': 1e-3, 'u': 1e-6, 'n': 1e-9, 'p': 1e-12
+}
+
+def convert_to_base_value(input_string):
+    """
+    入力文字列を基本単位の値に変換し、基本単位の文字とペアで返す。
+    エラーの場合はNoneを返す。
+    """
+    # 正規表現で「数値」「プレフィックス」「単位」を抽出
+    # μ (マイクロ) は入力として受け付けるが、内部処理は 'u' に統一する
+    match = re.match(r'(\d+\.?\d*)\s*([pnumkMGTμ]?)\s*([FΩf]|ohm)$', input_string.strip(), re.IGNORECASE)
+
+    if not match:
+        sys.stderr.write(f"エラー: 不正な入力形式です -> {input_string.strip()}\n")
+        return None
+
+    value_str, prefix_char, unit_char = match.groups()
+
+    try:
+        value = float(value_str)
+    except ValueError:
+        sys.stderr.write(f"エラー: 値の解析に失敗しました -> {value_str}\n")
+        return None
+
+    # μ (マイクロ) が入力された場合も 'u' として処理
+    prefix_key = prefix_char.lower()
+    if prefix_char.lower() == 'μ':
+        prefix_key = 'u'
+
+    multiplier = PREFIX_MAP.get(prefix_key, None)
+
+    if multiplier is None:
+        sys.stderr.write(f"エラー: 不明なプレフィックスです -> {prefix_char}\n")
+        return None
+
+    # 基本単位の値に変換
+    base_value = value * multiplier
+
+    base_unit = 'F' if unit_char.lower() in ('f', 'F') else 'Ω' if unit_char.lower() in ('Ω', 'ohm') else unit_char
+
+    return base_value, base_unit
+
+def main():
+    """
+    標準入力から1行読み込み、複数の接頭辞で変換し、改行区切りで出力する。
+    """
+    try:
+        input_line = sys.stdin.readline().strip()
+    except Exception as e:
+        sys.stderr.write(f"標準入力の読み込み中に致命的なエラーが発生しました: {e}\n")
+        sys.exit(1)
+
+    if not input_line:
+        if sys.stdin.isatty():
+             sys.stderr.write("標準入力に値をパイプまたはリダイレクトで渡してください。\n")
+        return
+
+    # 1. 基本単位の値を取得
+    conversion_result = convert_to_base_value(input_line)
+    if conversion_result is None:
+        return # エラーはconvert_to_base_value内でstderrに出力済み
+
+    base_value, base_unit = conversion_result
+
+    # 2. 複数の接頭辞での値を出力
+    for prefix, multiplier in TARGET_PREFIXES.items():
+        # (基本単位の値) / (ターゲット接頭辞の乗数)
+        display_value = base_value / multiplier
+
+        # 出力時のプレフィックスはそのまま (uの置換は不要)
+        display_prefix = prefix
+
+        # 変換結果を改行して出力
+        print(f"{display_value:.10g}{display_prefix}{base_unit}")
+
+    # 3. 基本単位の値を角括弧で囲んで出力
+    print(f"[{base_value:.10g}{base_unit}]")
+
+
+if __name__ == "__main__":
+    main()
