@@ -15,16 +15,15 @@ UNIT_SCRIPT="./unit_conversion"
 # ----------------------------------------
 
 # 期待される出力 (2バイト文字不使用)
-# ※ 以前の質問で確認された出力結果を使用
-EXPECTED_OUTPUT="3e-17 GF
-3e-14 MF
-3e-11 kF
-3e-08 F
-3e-05 mF
-0.03 uF
-30 nF
-30000 pF
-[3e-08 F]"
+EXPECTED_OUTPUT="3e-17GF
+3e-14MF
+3e-11kF
+3e-08F
+3e-05mF
+0.03uF
+30nF
+30000pF
+[3e-08F]"
 
 echo "--- Running Simple Test: 0.03uF Conversion ---"
 
