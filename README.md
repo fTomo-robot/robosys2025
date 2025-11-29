@@ -1,10 +1,6 @@
-# robosys2025
-ロボットシステム学課題1
-
-
-# 概要
-`unit_conversion` ![test](https://github.com/fTomo-robot/robosys2025/actions/workflows/test.yml/badge.svg)  
-コンデンサや抵抗の接頭辞を変換するコマンド
+# unit_conversion
+![test](https://github.com/fTomo-robot/robosys2025/actions/workflows/test.yml/badge.svg)  
+コンデンサや抵抗の接頭辞を変換するコマンド  
 	- 入力された電子部品の値を基本単位やその他の主な接頭辞をつけた状態で出力します
 
 # 動作確認環境
@@ -14,12 +10,13 @@
 - re モジュール（標準ライブラリ）
 
 # セットアップ
+```bash:クローン
+$ git clone https://github.com/fTomo-robot/robosys2025
+$ cd robosys2025
+$ chmod +x unit_conversion
+```
 
-
-
-
-
-# コマンド使用方法
+# 使用方法
 ```bash:入力方法
 $ echo "値と単位" | ./unit_conversion
 
