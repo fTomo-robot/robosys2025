@@ -5,7 +5,7 @@
 import sys
 import re
 
-# 単位プレフィックスと乗数の対応
+# 接頭辞と乗数の対応
 PREFIX_MAP = {
     'p': 1e-12, 'n': 1e-9, 'u': 1e-6, 'm': 1e-3, 
     '': 1.0, 
@@ -20,10 +20,7 @@ TARGET_PREFIXES = {
 }
 
 def convert_to_base_value(input_string):
-    """
-    入力文字列を基本単位の値に変換し、基本単位の文字とペアで返す。
-    エラーの場合はNoneを返す。エラーメッセージは標準エラー出力に出力する。
-    """
+   
     # 正規表現で「数値」「プレフィックス」「単位」を抽出 (μにも対応)
     match = re.match(r'(\d+\.?\d*)\s*([pnumkMGTμ]?)\s*([FΩf]|ohm)$', input_string.strip(), re.IGNORECASE)
     
@@ -33,7 +30,7 @@ def convert_to_base_value(input_string):
 
     value_str, prefix_char, unit_char = match.groups()
     
-    # μ (マイクロ) が入力された場合も 'u' として処理
+    # μ が入力された場合も 'u' として処理
     prefix_key = prefix_char.lower()
     if prefix_char.lower() == 'μ':
         prefix_key = 'u'
@@ -59,10 +56,7 @@ def convert_to_base_value(input_string):
     return base_value, base_unit
 
 def main():
-    """
-    標準入力から1行読み込み、複数の接頭辞で変換し、改行区切りで出力する。
-    エラー発生時は終了コード1を返す。
-    """
+    
     try:
         input_line = sys.stdin.readline().strip()
     except Exception as e:
@@ -78,7 +72,6 @@ def main():
     # 1. 基本単位の値を取得
     conversion_result = convert_to_base_value(input_line)
 
-    # 変換が失敗した場合 (Noneが返された場合) は、エラーメッセージを出力済みなので終了コード1を返す
     if conversion_result is None:
         sys.exit(1)
 
@@ -89,14 +82,12 @@ def main():
         # (基本単位の値) / (ターゲット接頭辞の乗数)
         display_value = base_value / multiplier
 
-        # 変換結果を改行して出力 ('3e-17GF' のようにスペースなし)
+        # 変換結果を改行して出力
         print(f"{display_value:.10g}{prefix}{base_unit}")
 
-    # 3. 基本単位の値を角括弧で囲んで出力 ('[3e-08F]' のようにスペースなし)
+    # 3. 基本単位の値を角括弧で囲んで出力
     print(f"[{base_value:.10g}{base_unit}]")
 
-    # 正常終了の場合は、暗黙的に終了コード0が返される
 
 if __name__ == "__main__":
-    # main()を呼び出す際のインデントも正しく修正
     main()
