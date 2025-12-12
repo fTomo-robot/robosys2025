@@ -17,21 +17,17 @@ $ chmod +x unit_conversion
 ```
 
 # 使用方法
-```bash:入力方法
-$ echo "値と単位" | ./unit_conversion
-
-#例
-$ echo "0.033nF" | ./unit_conversion
-```
-
-入力された値を以下の順序で改行区切りで標準出力に出力します  
+入力された値を以下の順序で改行区切りで標準出力に出力します
 
 `Giga, Mega, Kilo, Basic, Milli, Micro, Nano, Pico`
 
 基本単位は括弧`[]`で囲まれた状態で出力します。
 
-```bash:出力例
-# 0.033nF と入力した例
+```bash:入力方法
+$ echo "値と単位" | ./unit_conversion
+
+#例
+$ echo "0.033nF" | ./unit_conversion
 
 3.3e-20GF
 3.3e-17MF
@@ -62,6 +58,4 @@ $ echo "0.033nF" | ./unit_conversion
 
 # ライセンス・コピーライト
 - このソフトウェアパッケージは，3条項BSDライセンスの下，再頒布および使用が許可されます．
-- このパッケージのコードは，下記のスライド（CC-BY-SA 4.0 by Ryuichi Ueda）のものを，本人の許可を得て自身の著作としたものです．
-    - [ryuichiueda/my_slides robosys_2022](https://github.com/ryuichiueda/slides_marp/tree/master/prob_robotics_2025)
 - © 2025 Tomotaka Fujiwara
